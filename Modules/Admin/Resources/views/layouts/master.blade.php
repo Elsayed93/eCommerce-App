@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 
 <head>
     <meta charset="utf-8">
@@ -14,7 +14,9 @@
     <!-- IonIcons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+
+    @stack('head')
 </head>
 <!--
 `body` tag options:
@@ -51,6 +53,7 @@
                     <a class="nav-link" data-widget="navbar-search" href="#" role="button">
                         <i class="fas fa-search"></i>
                     </a>
+
                     <div class="navbar-search-block">
                         <form class="form-inline">
                             <div class="input-group input-group-sm">
@@ -68,6 +71,30 @@
                         </form>
                     </div>
                 </li>
+
+                {{-- change app language --}}
+                <li class="dropdown tasks-menu">
+                    <a href="#" class="nav-link" data-toggle="dropdown">
+                        <i class="fas fa-globe"></i>
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <li>
+                            {{-- <!-- inner menu: contains the actual data --> --}}
+                            <ul class="menu">
+                                @foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                                    <li>
+                                        <a rel="alternate" hreflang="{{ $localeCode }}"
+                                            href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                            {{ $properties['native'] }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                {{-- change app language --}}
 
                 <!-- Messages Dropdown Menu -->
                 <li class="nav-item dropdown">
@@ -116,7 +143,7 @@
                             <!-- Message Start -->
                             <div class="media">
                                 <img src="{{ asset('dist/img/user3-128x128.jpg') }}" alt="User Avatar"
-                                    class="img-size-50 img-circle mr-3">
+                                    class="img-size-50 img-circle mr-3" width="150">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         Nora Silvester
@@ -185,12 +212,11 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Dashboard v3</h1>
+                            <h1 class="m-0">@lang('admin::site.Dashboard')</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Dashboard v3</li>
+                                <li class="breadcrumb-item"><a href="#">@lang('admin::site.Dashboard')</a></li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -231,11 +257,12 @@
     <script src="{{ asset('dist/js/adminlte.js') }}"></script>
 
     <!-- OPTIONAL SCRIPTS -->
-    <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
+    {{-- <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script> --}}
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('dist/js/demo.js') }}"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="{{ asset('dist/js/pages/dashboard3.js') }}"></script>
+    @stack('script')
 </body>
 
 </html>

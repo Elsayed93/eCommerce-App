@@ -19,9 +19,18 @@ use Modules\Admin\Http\Controllers\AdminController;
 //     Route::get('/', 'AdminController@index');
 // });
 
-Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function () {
 
-    // Route::view('/', 'admin');
-    // Route::get('/', 'AdminController@index');
-    Route::get('/', [AdminController::class, 'index']);
-});
+Route::group(
+    [
+        'prefix' => LaravelLocalization::setLocale(),
+        'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
+    ],
+    function () { //...
+        Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function () {
+
+            // Route::view('/', 'admin');
+            // Route::get('/', 'AdminController@index');
+            Route::get('/', [AdminController::class, 'index']);
+        });
+    }
+);
