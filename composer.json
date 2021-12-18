@@ -13,7 +13,8 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
         "mcamara/laravel-localization": "^1.6",
-        "nwidart/laravel-modules": "^8.2"
+        "nwidart/laravel-modules": "^8.2",
+        "spatie/laravel-translatable": "^4.6"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

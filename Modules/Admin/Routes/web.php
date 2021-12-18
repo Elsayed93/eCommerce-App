@@ -15,22 +15,15 @@ use Modules\Admin\Http\Controllers\AdminController;
 */
 
 
-// Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
-//     Route::get('/', 'AdminController@index');
-// });
-
-
 Route::group(
     [
         'prefix' => LaravelLocalization::setLocale(),
         'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
     ],
     function () { //...
-        Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function () {
+        Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin', 'as' => 'dashboard.'], function () {
 
-            // Route::view('/', 'admin');
-            // Route::get('/', 'AdminController@index');
-            Route::get('/', [AdminController::class, 'index']);
+            Route::get('/', [AdminController::class, 'index'])->name('welcome');
         });
     }
 );

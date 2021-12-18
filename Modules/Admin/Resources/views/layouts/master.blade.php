@@ -13,8 +13,17 @@
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
     <!-- IonIcons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+    @if (app()->getLocale() == 'ar')
+        <link rel="stylesheet" href="{{ asset('dist/ar/dist/css/adminlte.min.css') }}">
+        <!-- Bootstrap 4 RTL -->
+        <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css">
+        <!-- Custom style for RTL -->
+        <link rel="stylesheet" href="{{asset('dist/ar/dist/css/custom.css')}}">
+    @else
+        <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+    @endif
 
     @stack('head')
 </head>
@@ -207,22 +216,6 @@
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">@lang('admin::site.Dashboard')</h1>
-                        </div><!-- /.col -->
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">@lang('admin::site.Dashboard')</a></li>
-                            </ol>
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-                </div><!-- /.container-fluid -->
-            </div>
-            <!-- /.content-header -->
 
             <!-- Main content -->
             @yield('content')
