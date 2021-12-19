@@ -19,7 +19,7 @@ return [
     'cancel' => 'Cancel',
     'add' => 'Add',
     'edit' => 'Edit',
-    'delete'=>'Delete',
+    'delete' => 'Delete',
 
     'please english enter name' => 'please english enter name',
     'please enter arabic name' => 'please enter arabic name',
@@ -32,4 +32,11 @@ return [
     'en_description' => 'English Description',
     'ar_description' => 'Arabic Description',
 
+    'category image' => 'category image',
+
+    'Select Category' => 'Select Category',
+    'Main Category' => 'Main Category',
+
+    'added_successfully' => 'Added Successfully',
+    'added_failed' => 'Added Failed',
 ];

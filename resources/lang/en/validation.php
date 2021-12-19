@@ -127,6 +127,8 @@ return [
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',
 
+    'same' => 'The :attribute and :other must match.',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -155,6 +157,17 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'name' => [
+            'en' => 'English name',
+            'ar' => 'Arabic name',
+        ],
+
+        'description' => [
+            'en' => 'English description',
+            'ar' => 'Arabic description',
+        ],
+
+    ],
 
 ];

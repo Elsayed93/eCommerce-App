@@ -25,7 +25,7 @@ return [
     'cancel' => 'إلغاء',
     'add' => 'إضافة',
     'edit' => 'تعديل',
-    'delete'=>'مسح',
+    'delete' => 'مسح',
 
     'please enter name' => 'قم بكتابة الإسم',
     'please enter description' => 'قم بكتابة الوصف',
@@ -35,6 +35,13 @@ return [
     'please enter english description' => 'قم بكتابة الوصف باللغة الإنجليزية',
     'please enter arabic description' => 'قم بكتابة الوصف باللغة العربية',
 
+    'category image' => 'صورة تصنيف',
 
+
+    'Select Category' => 'إختر تصنيف',
+    'Main Category' => 'تصنيف رئيسي',
+
+    'added_successfully' => 'تمت الإضافة بنجاح',
+    'added_failed' => 'لم يتم الإضافة',
 
 ];

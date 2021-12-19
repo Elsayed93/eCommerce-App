@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}" dir="{{ LaravelLocalization::getCurrentLocaleDirection() }}">
 
 <head>
     <meta charset="utf-8">
@@ -20,10 +20,27 @@
         <!-- Bootstrap 4 RTL -->
         <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css">
         <!-- Custom style for RTL -->
-        <link rel="stylesheet" href="{{asset('dist/ar/dist/css/custom.css')}}">
+        <link rel="stylesheet" href="{{ asset('dist/ar/dist/css/custom.css') }}">
     @else
         <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
     @endif
+
+    <!-- jQuery -->
+    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    <!-- Bootstrap -->
+    <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- AdminLTE -->
+    <script src="{{ asset('dist/js/adminlte.js') }}"></script>
+
+    <!-- OPTIONAL SCRIPTS -->
+    {{-- <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script> --}}
+
+    {{-- ckeditor --}}
+    <script src="{{ asset('plugins/ckeditor/ckeditor.js') }}"></script>
+
+    {{-- noty --}}
+    <link rel="stylesheet" href="{{ asset('plugins/noty/noty.css') }}">
+    <script src="{{ asset('plugins/noty/noty.min.js') }}"></script>
 
     @stack('head')
 </head>
@@ -220,6 +237,8 @@
             <!-- Main content -->
             @yield('content')
             <!-- /.Main content -->
+
+            @include('admin::layouts.partials.session')
         </div>
         <!-- /.content-wrapper -->
 
@@ -242,19 +261,14 @@
 
     <!-- REQUIRED SCRIPTS -->
 
-    <!-- jQuery -->
-    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-    <!-- Bootstrap -->
-    <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- AdminLTE -->
-    <script src="{{ asset('dist/js/adminlte.js') }}"></script>
-
-    <!-- OPTIONAL SCRIPTS -->
-    {{-- <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script> --}}
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('dist/js/demo.js') }}"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="{{ asset('dist/js/pages/dashboard3.js') }}"></script>
+
+    <script>
+        CKEDITOR.config.language = "{{ app()->getLocale() }}";
+    </script>
     @stack('script')
 </body>
 

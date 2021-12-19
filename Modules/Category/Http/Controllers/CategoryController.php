@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Category\Entities\Category;
+use CodeZero\UniqueTranslation\UniqueTranslationRule;
 
 class CategoryController extends Controller
 {
@@ -15,13 +16,9 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        // $categories = Category::all();
-        // return view('category::index', compact('categories'));
-
         $categories = Category::when($request->search, function ($query) use ($request) {
-            return $query->whereTranslationLike('name', '%' . $request->search . '%');
+            return $query->where('name', 'like', '%' . $request->search . '%');
         })->latest()->paginate(5);
-
 
         return view('category::index', compact('categories'));
     }
@@ -32,7 +29,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('category::create');
+        $categories = Category::all();
+        return view('category::create', compact('categories'));
     }
 
     /**
@@ -42,16 +40,49 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+
+
+
+        $rules = [];
+
+        foreach (config('laravellocalization.supportedLocales') as $locale => $langDetails) {
+            $rules += ['name.' . $locale => ['required', 'max:255', UniqueTranslationRule::for('categories', 'name')]];
+            $rules += ['description.' . $locale => ['required', 'max:255']];
+        }
+
+        $rules += ['image' => ['image', 'mimes:jpeg,png,jpg,gif,svg,max:2048']];
+
+        // validation
+        $request->validate($rules);
+
+        // image
+        if ($request->has('image')) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('uploads/categories'), $imageName);
+        } else {
+            $imageName = 'default.jpg';
+        }
+
 
         $category = new Category(); // This is an Eloquent model
-        // $category->parent_id
-        $category
-            ->setTranslation('name', 'en', $request->en_name)
-            ->setTranslation('name', 'ar', $request->ar_name)
-            ->setTranslation('description', 'en', $request->en_description)
-            ->setTranslation('description', 'ar', $request->ar_description)
-            ->save();
+
+        $category->parent_id = $request->parent_id; // parent_id
+
+        foreach (config('laravellocalization.supportedLocales') as $locale => $langDetails) {
+            $category
+                ->setTranslation('name', $locale, $request->name[$locale])
+                ->setTranslation('description', $locale, $request->description[$locale]);
+        }
+
+        $category->image = $imageName;
+        $category->save();
+
+
+        if ($category) {
+            return redirect()->route('dashboard.categories.index')->with('success', __('admin::site.added_successfully'));
+        } else {
+            return redirect()->back()->with('error', __('admin::site.added_failed'));
+        }
     }
 
     /**

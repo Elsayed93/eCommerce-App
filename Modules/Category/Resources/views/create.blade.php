@@ -6,7 +6,6 @@
     $modelName = end($link_array);
     @endphp
 
-
     <section class="content-header">
 
         <!-- Content Header (Page header) -->
@@ -45,6 +44,8 @@
             <div class="container">
                 <div class="card card-primary">
 
+                    @include('admin::layouts.partials.errors')
+
                     <div class="card-body">
                         <form method="POST" action="{{ route('dashboard.categories.store') }}"
                             enctype="multipart/form-data">
@@ -53,36 +54,50 @@
                             {{-- category english name --}}
                             <div class="form-group">
                                 <label for="inputName">@lang('admin::site.en_name')</label>
-                                <input type="text" name="en_name" id="inputName" class="form-control"
+                                <input type="text" name="name[en]" id="inputName" class="form-control"
                                     placeholder="@lang('admin::site.please english enter name')"
-                                    value="{{ old('en_name') }}">
+                                    value="{{ old('name.en') }}">
                             </div>
 
                             {{-- category arabic name --}}
                             <div class="form-group">
                                 <label for="inputName">@lang('admin::site.ar_name')</label>
-                                <input type="text" name="ar_name" id="inputName" class="form-control"
+                                <input type="text" name="name[ar]" id="inputName" class="form-control"
                                     placeholder="@lang('admin::site.please enter arabic name')"
-                                    value="{{ old('ar_name')}}">
+                                    value="{{ old('name.ar') }}">
                             </div>
 
                             {{-- category english description --}}
                             <div class="form-group">
                                 <label for="inputDescription">@lang('admin::site.en_description')</label>
-                                <textarea id="inputDescription" name="en_description" class="form-control" rows="4" placeholder="@lang('admin::site.please enter english description')">{{ old('en_description')}}</textarea>
+                                <textarea id="inputDescription" name="description[en]" class="form-control ckeditor" rows="4"
+                                    placeholder="@lang('admin::site.please enter english description')">{{ old('description.en') }}</textarea>
                             </div>
 
                             {{-- category arabic description --}}
                             <div class="form-group">
                                 <label for="inputDescription">@lang('admin::site.ar_description')</label>
-                                <textarea id="inputDescription" name="ar_description" class="form-control" rows="4"
-                                    placeholder="@lang('admin::site.please enter arabic description')">{{ old('ar_description')}}</textarea>
+                                <textarea id="inputDescription" name="description[ar]" class="form-control ckeditor" rows="4"
+                                    placeholder="@lang('admin::site.please enter arabic description')">{{ old('description.ar') }}</textarea>
                             </div>
 
-
+                            {{-- category image --}}
                             <div class="form-group">
                                 <label for="inputImage">@lang('admin::site.image')</label>
                                 <input type="file" name="image" id="inputImage" class="form-control">
+                            </div>
+
+                            {{-- categories --}}
+                            <div class="form-group">
+                                <label for="inputCategories">@lang('admin::site.Select Category')</label>
+                                <select id="inputCategories" class="form-control custom-select" name="parent_id">
+                                    <option value=''>@lang('admin::site.Main Category')</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}"
+                                            {{ old('parent_id') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="form-group">

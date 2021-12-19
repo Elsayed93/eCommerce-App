@@ -79,7 +79,7 @@
 
     <!-- Main content -->
     <section class="content">
-
+        {{-- {{dd($categories[0]->image)}} --}}
 
         <!-- Default box -->
         <div class="card">
@@ -93,6 +93,7 @@
                             </th>
                             <th>@lang('admin::site.name')</th>
                             <th>@lang('admin::site.description')</th>
+                            <th>@lang('admin::site.image')</th>
                             <th>@lang('admin::site.action')</th>
 
                         </tr>
@@ -104,7 +105,12 @@
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $category->name }}</td>
-                                    <td>{{ $category->description }}</td>
+                                    <td>{!! $category->description !!}</td>
+                                    <td>
+                                        <img class="img-thumbnail"
+                                            src="{{ asset('uploads/categories/' . $category->image) }}"
+                                            alt="{{ __('admin::site.category image') }}" width="100">
+                                    </td>
 
                                     <td>
                                         <a href="{{ route('dashboard.' . $modelName . '.edit', $category->id) }}"
