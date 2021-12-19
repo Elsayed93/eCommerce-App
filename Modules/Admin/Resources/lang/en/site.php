@@ -38,5 +38,15 @@ return [
     'Main Category' => 'Main Category',
 
     'added_successfully' => 'Added Successfully',
+    'updated_successfully' => 'Updated Successfully',
+
     'added_failed' => 'Added Failed',
+    'updated_failed' => 'Updated Failed',
+
+    'deleted_successfully' => 'Deleted Successfully',
+
+    'yes' => 'Yes',
+    'no' => 'No',
+    'confirm_delete'=>'Are you sure ?'
+
 ];

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Category\Entities\Category;
 use CodeZero\UniqueTranslation\UniqueTranslationRule;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -40,8 +42,6 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-
-
 
         $rules = [];
 
@@ -100,9 +100,11 @@ class CategoryController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        return view('category::edit');
+        $categories = Category::all();
+
+        return view('category::edit', compact('category', 'categories'));
     }
 
     /**
@@ -111,9 +113,54 @@ class CategoryController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $rules = [];
+
+        foreach (config('laravellocalization.supportedLocales') as $locale => $langDetails) {
+            $rules += ['name.' . $locale => ['required', 'max:255', UniqueTranslationRule::for('categories', 'name')->ignore($category->id)]];
+            $rules += ['description.' . $locale => ['required', 'max:255']];
+        }
+
+        $rules += ['image' => ['image', 'mimes:jpeg,png,jpg,gif,svg,max:2048']];
+
+        // validation
+        $request->validate($rules);
+
+        // image
+        if ($request->has('image')) {
+
+            // delete old image
+            if ($category->image != 'default.jpg') {
+                Storage::disk('public_uploads')->delete('categories/' . $category->image);
+            }
+
+            // insert new image
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('uploads/categories'), $imageName);
+
+            $request['imageName'] =  $imageName;
+        } else {
+            $request['imageName'] = 'default.jpg';
+        }
+
+        $category->parent_id = $request->parent_id; // parent_id
+
+        foreach (config('laravellocalization.supportedLocales') as $locale => $langDetails) {
+            $category
+                ->setTranslation('name', $locale, $request->name[$locale])
+                ->setTranslation('description', $locale, $request->description[$locale]);
+        }
+
+        $category->image = $request->imageName;
+        $category->save();
+
+
+        if ($category) {
+            return redirect()->route('dashboard.categories.index')->with('success', __('admin::site.updated_successfully'));
+        } else {
+            return redirect()->back()->with('error', __('admin::site.updated_failed'));
+        }
     }
 
     /**
@@ -121,8 +168,13 @@ class CategoryController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        //
+        if ($category->image != 'default.jpg') {
+            Storage::disk('public_uploads')->delete('categories/' . $category->image);
+        }
+
+        $category->delete();
+        return redirect()->route('dashboard.categories.index')->with('success', __('site.deleted_successfully'));
     }
 }

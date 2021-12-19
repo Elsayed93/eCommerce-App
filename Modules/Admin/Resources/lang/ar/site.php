@@ -44,4 +44,13 @@ return [
     'added_successfully' => 'تمت الإضافة بنجاح',
     'added_failed' => 'لم يتم الإضافة',
 
+    'updated_successfully' => 'تم التعديل بنجاح',
+    'updated_failed' => 'لم يتم التعديل',
+    'deleted_successfully'=>'تم الحذف بنجاح',
+
+    'yes' => 'نعم',
+    'no' => 'لا',
+
+    'confirm_delete'=>'هل أنت متأكد من عملية المسح ؟',
+
 ];
